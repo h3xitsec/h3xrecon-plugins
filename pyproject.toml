@@ -22,7 +22,7 @@ dependencies = [
     "six==1.16.0",
     "tabulate==0.9.0",
     "dnspython==2.7.0",
-    "h3xrecon_core @ git+https://github.com/h3xitsec/h3xrecon-core.git@v0.0.1"
+    "h3xrecon_core @ git+https://github.com/h3xitsec/h3xrecon-core.git@develop"
 ]
 
 [tool.hatch.metadata]
