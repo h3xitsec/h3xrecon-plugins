@@ -33,5 +33,6 @@ jobs:
           tag_name: "v0.0.1"
           files: |
             dist/*.whl
+            dist/*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
