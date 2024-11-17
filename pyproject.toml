@@ -29,4 +29,4 @@ dependencies = [
 allow-direct-references = true
 
 [tool.hatch.build]
-packages = ["h3xrecon_plugins"]
+packages = ["src/h3xrecon_plugins"]
