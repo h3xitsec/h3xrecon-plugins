@@ -24,6 +24,7 @@ jobs:
         with:
           python-version: '3.x'
                    
+      - run: pwd; ls -laR
       - name: Install build dependencies
         working-directory: h3xrecon_plugins
         run: |
@@ -31,7 +32,7 @@ jobs:
           pip install build
 
       - name: Build package
-        working-directory: h3xrecon_plugins/h3xrecon-plugins
+        working-directory: h3xrecon_plugins/
         run: |
           python -m build
         
