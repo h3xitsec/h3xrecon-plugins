@@ -28,5 +28,5 @@ dependencies = [
 [tool.hatch.metadata]
 allow-direct-references = true
 
-[tool.setuptools]
-py-modules = ["h3xrecon_plugins"]
+[tool.hatch.build]
+packages = ["h3xrecon_plugins"]
