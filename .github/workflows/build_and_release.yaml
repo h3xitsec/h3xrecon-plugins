@@ -17,6 +17,7 @@ jobs:
         with:
           repository: h3xitsec/h3xrecon-plugins
           path: h3xrecon-plugins
+          ref: ${{ github.ref }}
       
       - name: Set up Python
         uses: actions/setup-python@v4
