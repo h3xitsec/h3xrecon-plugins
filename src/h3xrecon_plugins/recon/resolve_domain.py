@@ -11,7 +11,7 @@ class ResolveDomain(ReconPlugin):
     def name(self) -> str:
         return os.path.splitext(os.path.basename(__file__))[0]
 
-    async def execute(self, target: str, program_id: int = None, execution_id: str = None) -> AsyncGenerator[Dict[str, Any], None]:
+    async def execute(self, target: str, program_id: int = None, execution_id: str = None, ) -> AsyncGenerator[Dict[str, Any], None]:
         logger.info(f"Running {self.name} on {target}")
         command = f"echo {target} | dnsx -nc -resp -a -cname -silent -j | jq -Mc '{{host: .host,a_records: (.a // []),cnames: (.cname // [])}}'"
         logger.debug(f"Running command: {command}")
@@ -32,12 +32,12 @@ class ResolveDomain(ReconPlugin):
 
         await process.wait()
 
-    async def process_output(self, output_msg: Dict[str, Any]):
+    async def process_output(self, output_msg: Dict[str, Any], db):
         self.config = Config()
-        self.db_manager = DatabaseManager(self.config.database.to_dict())
+        self.db = db #DatabaseManager(self.config.database.to_dict())
         self.qm = QueueManager(self.config.nats)
         try:
-            if await self.db_manager.check_domain_regex_match(output_msg.get('output').get('host'), output_msg.get('program_id')):
+            if await self.db.check_domain_regex_match(output_msg.get('output').get('host'), output_msg.get('program_id')):
                 if isinstance(output_msg.get('output').get('a_records'), list):
                     for ip in output_msg.get('output').get('a_records'):
                         if isinstance(ip, str):

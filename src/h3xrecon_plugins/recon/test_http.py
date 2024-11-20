@@ -54,15 +54,14 @@ class TestHTTP(ReconPlugin):
 
         await process.wait()
     
-    async def process_output(self, output_msg: Dict[str, Any]):
+    async def process_output(self, output_msg: Dict[str, Any], db):
         self.config = Config()
-        self.db_manager = DatabaseManager(self.config.database.to_dict())
+        self.db = db #DatabaseManager(self.config.database.to_dict())
         self.qm = QueueManager(self.config.nats)
         logger.debug(f"Incoming message:\nObject Type: {type(output_msg)}\nObject:\n{json.dumps(output_msg, indent=4)}")
-        if not await self.db_manager.check_domain_regex_match(output_msg.get('source').get('target'), output_msg.get('program_id')):
+        if not await self.db.check_domain_regex_match(output_msg.get('source').get('target'), output_msg.get('program_id')):
             logger.info(f"Domain {output_msg.get('source').get('target')} is not part of program {output_msg.get('program_id')}. Skipping processing.")
         else:
-            logger.info(f"Domain {output_msg.get('source').get('target')} is part of program {output_msg.get('program_id')}. Sending to data processor.")
             url_msg = {
                 "program_id": output_msg.get('program_id'),
                 "data_type": "url",

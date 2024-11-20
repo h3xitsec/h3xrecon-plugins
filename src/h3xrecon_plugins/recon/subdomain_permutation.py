@@ -38,10 +38,10 @@ class SubdomainPermutation(ReconPlugin):
 
         await process.wait()
     
-    async def process_output(self, output_msg: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_output(self, output_msg: Dict[str, Any], db) -> Dict[str, Any]:
         self.config = Config()
         self.qm = QueueManager(self.config.nats)
-        self.db = DatabaseManager(self.config.database.to_dict())
+        self.db = db #DatabaseManager(self.config.database.to_dict())
         is_catchall = await self.db.execute_query("SELECT is_catchall FROM domains WHERE domain = $1", output_msg.get("output").get("target"))
         logger.info(is_catchall)
         if is_catchall[0].get("is_catchall"):

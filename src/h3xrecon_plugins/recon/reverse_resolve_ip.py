@@ -30,7 +30,6 @@ class ReverseResolveIP(ReconPlugin):
     
     async def process_output(self, output_msg: Dict[str, Any]):
         self.config = Config()
-        self.db_manager = DatabaseManager(self.config.database.to_dict())
         self.qm = QueueManager(self.config.nats)
         domain_msg = {
             "program_id": output_msg.get('program_id'),

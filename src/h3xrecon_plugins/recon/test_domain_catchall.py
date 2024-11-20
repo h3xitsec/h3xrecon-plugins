@@ -49,11 +49,11 @@ class TestDomainCatchall(ReconPlugin):
         
         yield result
     
-    async def process_output(self, output_msg: Dict[str, Any]):
+    async def process_output(self, output_msg: Dict[str, Any], db):
         self.config = Config()
-        self.db_manager = DatabaseManager(self.config.database.to_dict())
+        self.db = db #DatabaseManager(self.config.database.to_dict())
         self.qm = QueueManager(self.config.nats)
-        if await self.db_manager.check_domain_regex_match(output_msg.get('source').get('target'), output_msg.get('program_id')):
+        if await self.db.check_domain_regex_match(output_msg.get('source').get('target'), output_msg.get('program_id')):
             logger.info(f"Domain {output_msg.get('source').get('target')} is part of program {output_msg.get('program_id')}. Sending to data processor.")
             msg = {
                 "program_id": output_msg.get('program_id'),
