@@ -54,7 +54,6 @@ class PortScan(ReconPlugin):
     
     async def process_output(self, output_msg: Dict[str, Any]):
         self.config = Config()
-        self.db_manager = DatabaseManager(self.config.database.to_dict())
         self.qm = QueueManager(self.config.nats)
         for service in output_msg.get('output', []):
             service_msg = {

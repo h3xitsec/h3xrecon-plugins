@@ -30,9 +30,9 @@ class FindSubdomainsSubfinder(ReconPlugin):
         await process.wait()
         logger.info(f"Finished {self.name} on {target}")
     
-    async def process_output(self, output_msg: Dict[str, Any]):
+    async def process_output(self, output_msg: Dict[str, Any], db):
         self.config = Config()
-        self.db_manager = DatabaseManager(self.config.database.to_dict())
+        self.db = db #DatabaseManager(self.config.database.to_dict())
         self.qm = QueueManager(self.config.nats)
         domain_msg = {
             "program_id": output_msg.get('program_id'),
