@@ -4,11 +4,6 @@ on:
   workflow_dispatch:
   workflow_call:
   push:
-    # Sequence of patterns matched against refs/heads
-    branches:
-      - main
-      - develop
-    # Sequence of patterns matched against refs/tags
     tags:
       - v0.*
 
@@ -36,10 +31,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install build
-      - run: |
-          pwd
-          ls -laR
-        working-directory: h3xrecon-plugins/
+      
       
       - name: Build package
         working-directory: h3xrecon-plugins/
@@ -54,4 +46,4 @@ jobs:
             h3xrecon-plugins/dist/*.whl
           repository: h3xitsec/h3xrecon
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
