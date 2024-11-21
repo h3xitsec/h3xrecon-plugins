@@ -41,7 +41,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v.0.0.2"
+          tag_name: ${{ github.ref_name }}
           files: |
             h3xrecon-plugins/dist/*.whl
           repository: h3xitsec/h3xrecon
