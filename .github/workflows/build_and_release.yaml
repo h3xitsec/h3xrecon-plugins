@@ -2,16 +2,7 @@ name: Build and Release Worker Plugins
 
 on:
   workflow_dispatch:
-  workflow_call:
-  push:
-    # Sequence of patterns matched against refs/heads
-    branches:
-      - main
-      - develop
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - v0.*
-
+  workflow_call: 
 
 permissions:
   packages: write
@@ -53,5 +44,6 @@ jobs:
           tag_name: "v0.0.1"
           files: |
             h3xrecon-plugins/dist/*.whl
+          repository: h3xitsec/h3xrecon
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
