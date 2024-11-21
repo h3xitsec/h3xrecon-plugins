@@ -12,7 +12,7 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "h3xrecon_core @ git+https://github.com/h3xitsec/h3xrecon-core.git",
+    "h3xrecon_core @ git+https://github.com/h3xitsec/h3xrecon-core.git@v0.0.2",
     "asyncio==3.4.3",
     "loguru==0.7.2",
     "jsondiff==2.2.1"

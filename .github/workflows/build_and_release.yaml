@@ -46,4 +46,4 @@ jobs:
             h3xrecon-plugins/dist/*.whl
           repository: h3xitsec/h3xrecon
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GHA_PAT }}
