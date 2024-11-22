@@ -6,9 +6,11 @@ from .base import ReconPlugin
 import pkgutil
 import importlib
 from typing import Dict, Type
-
+from h3xrecon_plugins.__about__ import __version__
+from loguru import logger
 # Automatically discover and load all plugins
 def load_plugins() -> Dict[str, Type[ReconPlugin]]:
+    logger.info(f"Loading plugins... (v{__version__})")
     plugins = {}
     plugin_path = __path__[0] + '/recon'
     for _, name, _ in pkgutil.iter_modules([plugin_path]):
