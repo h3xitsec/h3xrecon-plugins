@@ -35,11 +35,11 @@ jobs:
       
       - name: Get versions from __about__.py
         id: get_version
-        working-directory: h3xrecon-server
+        working-directory: h3xrecon-plugins
         run: |
           python -c "
-          with open('src/h3xrecon_server/__about__.py', 'r') as f: 
-              exec(compile(f.read(), 'src/h3xrecon_server/__about__.py', 'exec'), globals())
+          with open('src/h3xrecon_plugins/__about__.py', 'r') as f: 
+              exec(compile(f.read(), 'src/h3xrecon_plugins/__about__.py', 'exec'), globals())
           print(f'version=v{__version__}')
           print(f'core_version=v{__core_version__}')
           " >> $GITHUB_OUTPUT
