@@ -50,6 +50,7 @@ jobs:
           repository: h3xitsec/h3xrecon-core
           path: h3xrecon-core
           ref: ${{ steps.get_version.outputs.core_version }}
+          token: ${{ secrets.GHA_PAT }}
       
       - name: Build package
         working-directory: h3xrecon-plugins
