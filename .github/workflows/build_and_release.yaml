@@ -61,6 +61,6 @@ jobs:
           tag_name: ${{ steps.get_version.outputs.version }}
           files: |
             h3xrecon-plugins/dist/*.whl
-          repository: h3xitsec/h3xrecon
+          repository: h3xitsec/h3xrecon-plugins
         env:
           GITHUB_TOKEN: ${{ secrets.GHA_PAT }}
