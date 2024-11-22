@@ -40,7 +40,7 @@ jobs:
           python -c "
           with open('src/h3xrecon_plugins/__about__.py', 'r') as f: 
               exec(compile(f.read(), 'src/h3xrecon_plugins/__about__.py', 'exec'), globals())
-          print(f'version=v{__version__}')
+          print(f'version={__version__}')
           " >> $GITHUB_OUTPUT
 
       - name: Checkout core repository
@@ -48,7 +48,7 @@ jobs:
         with:
           repository: h3xitsec/h3xrecon-core
           path: h3xrecon-core
-          ref: ${{ steps.get_version.outputs.core_version }}
+          ref: v${{ steps.get_version.outputs.core_version }}
       
       - name: Build package
         working-directory: h3xrecon-plugins
@@ -58,7 +58,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.get_version.outputs.version }}
+          tag_name: v${{ steps.get_version.outputs.version }}
           files: |
             h3xrecon-plugins/dist/*.whl
           repository: h3xitsec/h3xrecon-plugins
