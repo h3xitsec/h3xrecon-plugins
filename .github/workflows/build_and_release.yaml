@@ -1,11 +1,10 @@
-name: Build and Release Worker Plugins
-
+name: Build and Release Plugins Module
 on:
   workflow_dispatch:
   workflow_call:
   push:
-    tags:
-      - v0.*
+    branches:
+      - release/*
 
 permissions:
   packages: write
@@ -25,23 +24,41 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
-
+          python-version: '3.12.7'
+          
       - name: Install build dependencies
+        working-directory: h3xrecon-plugins
         run: |
           python -m pip install --upgrade pip
-          pip install build
+          pip install hatchling
+          pip install -r requirements.txt
       
+      - name: Get versions from __about__.py
+        id: get_version
+        working-directory: h3xrecon-plugins
+        run: |
+          python -c "
+          with open('src/h3xrecon_plugins/__about__.py', 'r') as f: 
+              exec(compile(f.read(), 'src/h3xrecon_plugins/__about__.py', 'exec'), globals())
+          print(f'version=v{__version__}')
+          " >> $GITHUB_OUTPUT
+
+      - name: Checkout core repository
+        uses: actions/checkout@v3
+        with:
+          repository: h3xitsec/h3xrecon-core
+          path: h3xrecon-core
+          ref: ${{ steps.get_version.outputs.core_version }}
       
       - name: Build package
-        working-directory: h3xrecon-plugins/
+        working-directory: h3xrecon-plugins
         run: |
-          python -m build
+          python -m hatchling build
         
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v0.0.2
+          tag_name: ${{ steps.get_version.outputs.version }}
           files: |
             h3xrecon-plugins/dist/*.whl
           repository: h3xitsec/h3xrecon
