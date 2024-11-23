@@ -50,6 +50,11 @@ jobs:
         run: |
           python -m hatchling build
       
+      - uses: jimeh/update-tags-action@v1
+        with:
+          tags: |
+            ${{ steps.get_version.outputs.version }}
+      
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
