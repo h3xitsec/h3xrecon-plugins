@@ -52,7 +52,7 @@ class PortScan(ReconPlugin):
             count = extraports.get('count')
             logger.info(f"Total filtered ports: {count}")
     
-    async def process_output(self, output_msg: Dict[str, Any]):
+    async def process_output(self, output_msg: Dict[str, Any], db = None) -> Dict[str, Any]:
         self.config = Config()
         self.qm = QueueManager(self.config.nats)
         for service in output_msg.get('output', []):

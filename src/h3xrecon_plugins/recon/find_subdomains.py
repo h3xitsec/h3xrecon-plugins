@@ -53,7 +53,7 @@ class FindSubdomainsPlugin(ReconPlugin):
             message=message
         )
     
-    async def process_output(self, output_msg: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_output(self, output_msg: Dict[str, Any], db = None) -> Dict[str, Any]:
         self.config = Config()
         self.qm = QueueManager(self.config.nats)
         await self.qm.publish_message(

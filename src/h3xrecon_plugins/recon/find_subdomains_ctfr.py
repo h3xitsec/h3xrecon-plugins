@@ -30,7 +30,7 @@ class FindSubdomainsCTFR(ReconPlugin):
 
         await process.wait()
     
-    async def process_output(self, output_msg: Dict[str, Any], db):
+    async def process_output(self, output_msg: Dict[str, Any], db = None) -> Dict[str, Any]:
         self.config = Config()
         self.qm = QueueManager(self.config.nats)
         domain_msg = {
