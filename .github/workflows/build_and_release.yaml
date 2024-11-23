@@ -1,10 +1,7 @@
-name: Build and Release Plugins Module
+name: Build and release the module
 on:
   workflow_dispatch:
   workflow_call:
-  push:
-    branches:
-      - release/*
 
 permissions:
   packages: write
@@ -14,12 +11,8 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout plugins repository
+      - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          repository: h3xitsec/h3xrecon-plugins
-          path: h3xrecon-plugins
-          ref: ${{ github.ref }}
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -27,7 +20,6 @@ jobs:
           python-version: '3.12.7'
           
       - name: Install build dependencies
-        working-directory: h3xrecon-plugins
         run: |
           python -m pip install --upgrade pip
           pip install hatchling
@@ -35,44 +27,34 @@ jobs:
       
       - name: Get versions from __about__.py
         id: get_version
-        working-directory: h3xrecon-plugins
         run: |
           python -c "
-          with open('src/h3xrecon_plugins/__about__.py', 'r') as f: 
-              exec(compile(f.read(), 'src/h3xrecon_plugins/__about__.py', 'exec'), globals())
-          print(f'version=v{__version__}')
-          print(f'core_version=v{__core_version__}')
+          import os
+          
+          def find_about_file(start_path='src'):
+              for root, dirs, files in os.walk(start_path):
+                  if '__about__.py' in files:
+                      return os.path.join(root, '__about__.py')
+              return None
+          
+          about_file = find_about_file()
+          if about_file:
+              with open(about_file, 'r') as f: 
+                  exec(compile(f.read(), about_file, 'exec'), globals())
+              print(f'version=v{__version__}')
+          else:
+              print('Error: __about__.py not found')
           " >> $GITHUB_OUTPUT
-
-      - name: Checkout core repository
-        uses: actions/checkout@v3
-        with:
-          repository: h3xitsec/h3xrecon-core
-          path: h3xrecon-core
-          ref: ${{ steps.get_version.outputs.core_version }}
-          token: ${{ secrets.GHA_PAT }}
       
       - name: Build package
-        working-directory: h3xrecon-plugins
         run: |
           python -m hatchling build
-        
+          mv ./dist/*.whl ./dist/$(echo "${{ github.repository }}"|sed 's/.*\///; s/\-/\_/')-${{ steps.get_version.outputs.version }}.whl
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
           files: |
-            h3xrecon-plugins/dist/*.whl
-          repository: h3xitsec/h3xrecon
+            ./dist/*.whl
         env:
-          GITHUB_TOKEN: ${{ secrets.GHA_PAT }}
-        
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.get_version.outputs.version }}
-          files: |
-            h3xrecon-plugins/dist/*.whl
-          repository: h3xitsec/h3xrecon-plugins
-        env:
-          GITHUB_TOKEN: ${{ secrets.GHA_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
