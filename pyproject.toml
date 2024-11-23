@@ -15,7 +15,8 @@ dependencies = [
     "h3xrecon_core @ git+https://github.com/h3xitsec/h3xrecon-core@v0.0.3",
     "asyncio==3.4.3",
     "loguru==0.7.2",
-    "jsondiff==2.2.1"
+    "jsondiff==2.2.1",
+    "pydns==2.3.8"
 ]
 
 [tool.hatch.metadata]
